@@ -4,8 +4,8 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 # Membaca data
-day_data = pd.read_csv(r'C:\Users\Citra\Documents\.bootcamp\Dicoding\Proyek Analisis Data\submission\dashboard\day.csv')
-hour_data = pd.read_csv(r'C:\Users\Citra\Documents\.bootcamp\Dicoding\Proyek Analisis Data\submission\dashboard\hour.csv')
+day_data = pd.read_csv("day.csv")
+hour_data = pd.read_csv("hour.csv")
 
 # Judul dashboard
 st.title('Dashboard Bike Sharing')
