@@ -29,11 +29,15 @@ else:
 st.write("Jumlah Data:", len(data))
 st.write("Kolom Data:", data.columns.tolist())
 
+# Fitur Interaktif: Filter berdasarkan Musim
+season_filter = st.sidebar.selectbox('Pilih Musim:', data['season'].unique())
+data_filtered = data[data['season'] == season_filter]
+
 # Visualisasi distribusi penyewaan sepeda berdasarkan musim
 if 'season' in data.columns:
-    st.subheader('Distribusi Penyewaan Sepeda Berdasarkan Musim')
+    st.subheader(f'Distribusi Penyewaan Sepeda Berdasarkan Musim: {season_filter}')
     fig1, ax1 = plt.subplots(figsize=(10, 6))
-    sns.countplot(x='season', data=data, ax=ax1)
+    sns.countplot(x='season', data=data_filtered, ax=ax1)
     ax1.set_title('Distribusi Penyewaan Sepeda Berdasarkan Musim')
     ax1.set_xlabel('Musim')
     ax1.set_ylabel('Jumlah Penyewaan')
@@ -45,7 +49,7 @@ else:
 if 'temp' in data.columns and 'cnt' in data.columns:
     st.subheader('Hubungan Suhu dan Jumlah Penyewaan Sepeda')
     fig2, ax2 = plt.subplots(figsize=(10, 6))
-    sns.scatterplot(x='temp', y='cnt', data=data, ax=ax2)
+    sns.scatterplot(x='temp', y='cnt', data=data_filtered, ax=ax2)
     ax2.set_title('Hubungan Suhu dan Jumlah Penyewaan Sepeda')
     ax2.set_xlabel('Suhu')
     ax2.set_ylabel('Jumlah Penyewaan')
@@ -53,12 +57,20 @@ if 'temp' in data.columns and 'cnt' in data.columns:
 else:
     st.write("Kolom 'temp' atau 'cnt' tidak tersedia pada dataset ini.")
 
+# Fitur Interaktif: Filter berdasarkan Tanggal
+st.sidebar.subheader("Filter berdasarkan Tanggal")
+start_date = st.sidebar.date_input("Pilih Tanggal Mulai", pd.to_datetime(data['dteday'].min()))
+end_date = st.sidebar.date_input("Pilih Tanggal Selesai", pd.to_datetime(data['dteday'].max()))
+
+# Filter data berdasarkan tanggal
+data_filtered_date = data[(data['dteday'] >= str(start_date)) & (data['dteday'] <= str(end_date))]
+
 # Visualisasi tambahan untuk hour.csv
 if dataset_choice == 'hour.csv (Detail Per Jam)':
     if 'hr' in data.columns and 'cnt' in data.columns:
         st.subheader('Jumlah Penyewaan Berdasarkan Jam')
         fig3, ax3 = plt.subplots(figsize=(10, 6))
-        sns.lineplot(x='hr', y='cnt', data=data, ax=ax3)
+        sns.lineplot(x='hr', y='cnt', data=data_filtered_date, ax=ax3)
         ax3.set_title('Jumlah Penyewaan Berdasarkan Jam')
         ax3.set_xlabel('Jam')
         ax3.set_ylabel('Jumlah Penyewaan')
